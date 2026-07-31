@@ -33,5 +33,7 @@ structured knowledge (same chronicle format, same queue format) and does not own
 - Follow the Rosetta architecture on the TypeScript side: Handler / Service / Repository +
   InversifyJS (see workspace architecture rules).
 - Follow the standard Rosetta git workflow, Conventional Commits, and code style (workspace root `CLAUDE.md`).
+  Default: `f/` / `b/` topic branches + PR — no commits on `main` unless a human authorizes a
+  documented exception. Husky enforces Conventional Commits.
 
 > Chronicle is the memory. Wayfinder is the guide.
