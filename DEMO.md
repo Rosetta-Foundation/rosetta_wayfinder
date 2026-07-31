@@ -21,7 +21,7 @@ export ANTHROPIC_API_KEY=sk-ant-...
 # (~/.wayfinder/config.json has your path — no action needed)
 
 # 3. Start Wayfinder
-cd rosetta_wayfinder && yarn tauri:dev
+cd rosetta_wayfinder && bun run tauri:dev
 ```
 
 The org knowledge path is pre-filled to `rosetta_docs` — no typing needed before

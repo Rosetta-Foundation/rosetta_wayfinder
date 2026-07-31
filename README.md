@@ -25,10 +25,10 @@ with `CURSOR_API_KEY`. Wayfinder chat/standup/knowledge use Claude directly.
 ## Setup
 
 ```bash
-# Prerequisites: Node 20+, Yarn 1.22+, Rust stable, Tauri CLI
+# Prerequisites: Node 20+, Bun 1.3+, Rust stable, Tauri CLI
 export ANTHROPIC_API_KEY=sk-ant-...
-yarn install
-yarn tauri:dev
+bun install
+bun run tauri:dev
 ```
 
 On first launch, Wayfinder asks you to point it at your chronicle repo. The path is saved to
