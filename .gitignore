@@ -1,0 +1,13 @@
+node_modules
+dist
+coverage
+.DS_Store
+
+# Rust / Tauri build artifacts
+src-tauri/target
+src-tauri/gen
+
+# Mobile icon sets (mobile deferred per PRD-0010; desktop icons only)
+src-tauri/icons/android
+src-tauri/icons/ios
+.env
