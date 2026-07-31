@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Wayfinder — the local-first knowledge guide of the Rosetta platform.",
   "private": true,
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
