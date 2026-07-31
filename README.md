@@ -46,3 +46,7 @@ Tauri 2.x desktop app:
 ## Demo
 
 See [DEMO.md](DEMO.md) for the demo script and seeded data instructions.
+
+## License
+
+[Apache-2.0](LICENSE) — Copyright 2026 Rosetta Foundation.
