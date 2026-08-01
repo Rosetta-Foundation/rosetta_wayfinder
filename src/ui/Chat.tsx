@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getAppHandler } from "../container";
+import { MarkdownContent } from "../utils/markdown";
 import type { ChatMessage, Citation, ModelChoice } from "../types";
 
 const MODEL_OPTIONS: { value: ModelChoice; label: string }[] = [
@@ -22,6 +23,11 @@ interface Props {
   orgRepoPath?: string;
   /** Personal chronicle repo path — searched alongside org knowledge. */
   chronicleRepoPath?: string;
+  /**
+   * Seed messages for the log. Purely presentational — lets component tests
+   * render conversation states without driving the input flow.
+   */
+  initialMessages?: DisplayMessage[];
 }
 
 /**
@@ -31,9 +37,15 @@ interface Props {
  * Both route through the AppHandler → service → Claude chain (credentials never
  * touch the webview, ADR-0003).
  */
-export const Chat = ({ orgRepoPath, chronicleRepoPath }: Props) => {
+export const Chat = ({
+  orgRepoPath,
+  chronicleRepoPath,
+  initialMessages,
+}: Props) => {
   const [mode, setMode] = useState<Mode>("org");
-  const [messages, setMessages] = useState<DisplayMessage[]>([]);
+  const [messages, setMessages] = useState<DisplayMessage[]>(
+    initialMessages ?? [],
+  );
   const [input, setInput] = useState("");
   const [model, setModel] = useState<ModelChoice>("auto");
   const [orgPath, setOrgPath] = useState(orgRepoPath ?? DEFAULT_ORG_PATH);
@@ -135,7 +147,15 @@ export const Chat = ({ orgRepoPath, chronicleRepoPath }: Props) => {
               <span className="chat__role">
                 {m.role === "user" ? "You" : "Wayfinder"}
               </span>
-              <p className="chat__content">{m.content}</p>
+              {m.role === "assistant" ? (
+                // Display-time markdown rendering only — m.content itself
+                // stays the raw markdown string (no data-contract change).
+                <div className="chat__content chat__content--md">
+                  <MarkdownContent markdown={m.content} />
+                </div>
+              ) : (
+                <p className="chat__content">{m.content}</p>
+              )}
               {m.citations && m.citations.length > 0 && (
                 <ul className="chat__citations">
                   {m.citations.map((c, j) => (
