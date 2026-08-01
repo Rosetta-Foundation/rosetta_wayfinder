@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getAppHandler } from "../container";
+import { MarkdownContent } from "../utils/markdown";
 import type { ChatMessage, Citation, ModelChoice } from "../types";
 
 const MODEL_OPTIONS: { value: ModelChoice; label: string }[] = [
@@ -135,7 +136,14 @@ export const Chat = ({ orgRepoPath, chronicleRepoPath }: Props) => {
               <span className="chat__role">
                 {m.role === "user" ? "You" : "Wayfinder"}
               </span>
-              <p className="chat__content">{m.content}</p>
+              {m.role === "assistant" ? (
+                // Display-time markdown only — m.content stays the raw string.
+                <div className="chat__content chat__content--md">
+                  <MarkdownContent markdown={m.content} />
+                </div>
+              ) : (
+                <p className="chat__content">{m.content}</p>
+              )}
               {m.citations && m.citations.length > 0 && (
                 <ul className="chat__citations">
                   {m.citations.map((c, j) => (
