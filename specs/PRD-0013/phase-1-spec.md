@@ -7,7 +7,7 @@ date: 2026-08-01
 owner: Russ Watson
 envelope:
   allowedPaths: ["src/ui/Chat.tsx", "src/ui/styles.css", "src/utils/markdown*", "src/__tests__/**", "package.json", "bun.lock"]
-  forbiddenSurfaces: ["migrations", "auth", "ci-config", "server-api", "data-contract", "storage-schema"]
+  forbiddenSurfaces: ["ci-config", "native-shell"]
   maxDiffLines: 600
   budgetK: 80
 ---
@@ -25,6 +25,18 @@ Assistant responses currently display as raw markdown text, so structure like he
 - **Depends on:** []
 
 Introduce a small, well-maintained markdown parser (e.g. react-markdown or marked + a thin wrapper) and apply it only to assistant answer/reply strings at display time in Chat.tsx. Keep the transformation purely presentational: stored strings remain raw markdown and no request/response or persistence shape changes. Do not touch the user input textarea (stays plain text) or the chat__citations block. Isolate parsing behind a single render helper/component so T-02 can wrap sanitization around it without touching call sites. Avoid dangerouslySetInnerHTML directly in Chat.tsx; if the chosen library requires HTML injection, confine it to the helper so the sanitization boundary in T-02 is a single choke point.
+
+> **Amendment (2026-08-01, post attempt 1):** a maintained library is
+> mandatory, not advisory — do NOT hand-roll a markdown parser (attempt 1
+> was blocked by the reviewer gate for exactly this). Use react-markdown
+> (with remark-gfm) or the unified pipeline from PRD-0013 §3; add the
+> dependency via bun (package.json + bun.lock are in the envelope). Link
+> destinations must be scheme-restricted at render time — `javascript:`
+> and `data:` URLs must not reach an href, with a test proving it. Do not
+> change Chat's public props for testability; for component tests use
+> @testing-library/react with a per-file `@jest-environment jsdom`
+> docblock (jest.config.js is outside the envelope) rather than any
+> runtime-compilation harness.
 
 ### Acceptance criteria
 
