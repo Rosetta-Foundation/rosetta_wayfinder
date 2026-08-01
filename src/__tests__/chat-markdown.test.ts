@@ -4,7 +4,6 @@
 import { createElement } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Chat } from "../ui/Chat";
-import { MarkdownContent } from "../utils/markdown";
 import type { Citation } from "../types";
 
 /**
@@ -108,9 +107,14 @@ describe("Chat markdown rendering", () => {
     const result = await askKnowledge.mock.results[0].value;
     expect(result.answer).toBe(answer);
 
-    // The render helper also preserves the prop it was given.
-    const element = createElement(MarkdownContent, { markdown: answer });
-    expect(element.props.markdown).toBe(answer);
+    // Chat rendered the assistant bubble via the markdown container — the
+    // stored contract string itself was never rewritten.
+    const assistantBubbles = document.querySelectorAll(
+      ".chat__message--assistant .chat__content--md",
+    );
+    expect(assistantBubbles.length).toBeGreaterThan(0);
+    expect(result.answer).toContain("## Raw");
+    expect(result.answer).toContain("**markdown**");
   });
 
   it("renders and submits the user input textarea as plain text", async () => {
