@@ -1,0 +1,4 @@
+{
+  "ci-config": [".github/workflows/**"],
+  "native-shell": ["src-tauri/**"]
+}
