@@ -110,7 +110,7 @@ describe("Chat markdown rendering", () => {
     // Chat rendered the assistant bubble via the markdown container — the
     // stored contract string itself was never rewritten.
     const assistantBubbles = document.querySelectorAll(
-      ".chat__message--assistant .chat__content--md",
+      ".chat__msg--assistant .chat__content--md",
     );
     expect(assistantBubbles.length).toBeGreaterThan(0);
     expect(result.answer).toContain("## Raw");
