@@ -43,6 +43,18 @@ Tauri 2.x desktop app:
 - **TypeScript frontend** — all logic under the Handler / Service / Repository pattern with
   InversifyJS (see workspace architecture rules).
 
+## SDLC automation contracts
+
+This repo is onboarded to the PRD-0011 SDLC workflow (`sdlc-workflow` in
+`rosetta_dev-scripts`). The repo-owned contracts live in `.sdlc/`:
+
+- `environments.json` — sandbox deploy/health via `scripts/sandbox-deploy.sh`
+  and `scripts/sandbox-health.sh` (a local process sandbox that stages the
+  Vite build keyed by SHA; the Tauri shell is not built).
+- `verification.json` — the test command the verification gate runs.
+- `surfaces.json` — forbidden surfaces (`ci-config`, `native-shell`) that the
+  envelope gate blocks task agents from touching.
+
 ## Demo
 
 See [DEMO.md](DEMO.md) for the demo script and seeded data instructions.
