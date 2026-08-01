@@ -4,6 +4,7 @@
 import { createElement } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Chat } from "../ui/Chat";
+import { MarkdownContent } from "../utils/markdown";
 import type { Citation } from "../types";
 
 /**
@@ -22,6 +23,18 @@ jest.mock("../container", () => ({
   }),
 }));
 
+// Spy wrapper: real renderer for DOM assertions, call history for the
+// "stored string stays raw markdown" criterion.
+jest.mock("../utils/markdown", () => {
+  const actual = jest.requireActual("../utils/markdown") as typeof import("../utils/markdown");
+  return {
+    ...actual,
+    MarkdownContent: jest.fn((props: { markdown: string }) =>
+      actual.MarkdownContent(props),
+    ),
+  };
+});
+
 const typeAndSend = (text: string): void => {
   // Mode defaults to "org", which also renders the org-path input — target
   // the editor textarea explicitly so we never type into the path field.
@@ -36,6 +49,7 @@ describe("Chat markdown rendering", () => {
   beforeEach(() => {
     askKnowledge.mockReset();
     sendChat.mockReset();
+    (MarkdownContent as jest.Mock).mockClear();
   });
 
   it("renders assistant markdown as h2/strong/code/ul-li in the message log", async () => {
@@ -103,18 +117,15 @@ describe("Chat markdown rendering", () => {
       expect(screen.getByRole("heading", { level: 2 })).toBeTruthy();
     });
 
-    // Display-time only: the handler payload (data contract) stays raw markdown.
+    // Display-time only: the handler payload (data contract) stays raw
+    // markdown, and Chat passes that exact string into MarkdownContent —
+    // never a pre-rendered HTML rewrite of it.
     const result = await askKnowledge.mock.results[0].value;
     expect(result.answer).toBe(answer);
-
-    // Chat rendered the assistant bubble via the markdown container — the
-    // stored contract string itself was never rewritten.
-    const assistantBubbles = document.querySelectorAll(
-      ".chat__msg--assistant .chat__content--md",
+    expect(MarkdownContent).toHaveBeenCalledWith(
+      expect.objectContaining({ markdown: answer }),
+      expect.anything(),
     );
-    expect(assistantBubbles.length).toBeGreaterThan(0);
-    expect(result.answer).toContain("## Raw");
-    expect(result.answer).toContain("**markdown**");
   });
 
   it("renders and submits the user input textarea as plain text", async () => {

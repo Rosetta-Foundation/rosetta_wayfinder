@@ -39,7 +39,12 @@ const esModules = [
   'estree-util-.*',
   'mdast-util-from-markdown',
   'mdast-util-to-hast',
-  'mdast-util-to-markdown'
+  'mdast-util-to-markdown',
+  // react-markdown render hot path (lockfile-transitive, ESM-only)
+  'style-to-js',
+  'style-to-object',
+  'inline-style-parser',
+  '@ungap/structured-clone'
 ].join('|');
 
 export default {
