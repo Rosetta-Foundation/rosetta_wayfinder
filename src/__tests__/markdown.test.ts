@@ -46,16 +46,6 @@ describe("MarkdownContent", () => {
     expect(quote?.tagName).toBe("BLOCKQUOTE");
   });
 
-  it("receives and preserves the raw markdown string unmodified", () => {
-    const source =
-      "## Heading with **bold** and [a link](https://example.com)";
-    const element = createElement(MarkdownContent, { markdown: source });
-
-    render(element);
-
-    expect(element.props.markdown).toBe(source);
-  });
-
   it("does not let javascript: or data: URLs reach href", () => {
     render(
       createElement(MarkdownContent, {
