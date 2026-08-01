@@ -6,7 +6,7 @@ status: Approved # Draft | Approved | Done | Superseded
 date: 2026-08-01
 owner: Russ Watson
 envelope:
-  allowedPaths: ["src/ui/Chat.tsx", "src/ui/styles.css", "src/utils/markdown*", "src/__tests__/**", "package.json", "bun.lock"]
+  allowedPaths: ["src/ui/Chat.tsx", "src/ui/styles.css", "src/utils/markdown*", "src/__tests__/**", "package.json", "bun.lock", "jest.config.js"]
   forbiddenSurfaces: ["ci-config", "native-shell"]
   maxDiffLines: 600
   budgetK: 80
@@ -37,6 +37,11 @@ Introduce a small, well-maintained markdown parser (e.g. react-markdown or marke
 > @testing-library/react with a per-file `@jest-environment jsdom`
 > docblock (jest.config.js is outside the envelope) rather than any
 > runtime-compilation harness.
+>
+> **Amendment (2026-08-01, attempt 2):** `jest.config.js` is in the
+> envelope — react-markdown is ESM-only and Chat.tsx component tests
+> need the Jest TSX transform + transformIgnorePatterns; a per-file
+> jsdom docblock alone is not enough.
 
 ### Acceptance criteria
 
