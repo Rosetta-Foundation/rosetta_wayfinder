@@ -8,7 +8,7 @@ owner: Russ Watson
 envelope:
   allowedPaths: ["src/ui/Chat.tsx", "src/ui/styles.css", "src/utils/markdown*", "src/__tests__/**", "package.json", "bun.lock", "jest.config.js"]
   forbiddenSurfaces: ["ci-config", "native-shell"]
-  maxDiffLines: 600
+  maxDiffLines: 1200
   budgetK: 80
 ---
 
@@ -42,6 +42,11 @@ Introduce a small, well-maintained markdown parser (e.g. react-markdown or marke
 > envelope — react-markdown is ESM-only and Chat.tsx component tests
 > need the Jest TSX transform + transformIgnorePatterns; a per-file
 > jsdom docblock alone is not enough.
+>
+> **Amendment (2026-08-01, attempt 2b):** raise maxDiffLines to 1200 —
+> adding react-markdown via bun rewrites bun.lock by ~400 lines alone,
+> which made a correct implementation impossible under the prior 600-line
+> budget.
 
 ### Acceptance criteria
 
